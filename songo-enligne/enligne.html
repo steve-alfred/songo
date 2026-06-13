@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>🪘 Jeu de Songo - En Ligne 🪘</title>
+    <link rel="stylesheet" href="../songo.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <h1>🪘 Le Jeu de Songo 🪘</h1>
+        <div id="player-badge">Connexion...</div>
+
+        <div id="board-area">
+            <div class="score-side" id="score-left">
+                <div class="player-score" id="score-wrap-p2">
+                    <span class="score-label">Joueur 2</span>
+                    <span class="score-val" id="score-p2">0</span>
+                </div>
+            </div>
+
+            <div id="board-container">
+                <div id="board">
+                    <div class="row" id="row-p2">
+                        <div class="hole" data-index="13">5</div>
+                        <div class="hole" data-index="12">5</div>
+                        <div class="hole" data-index="11">5</div>
+                        <div class="hole" data-index="10">5</div>
+                        <div class="hole" data-index="9">5</div>
+                        <div class="hole" data-index="8">5</div>
+                        <div class="hole" data-index="7">5</div>
+                    </div>
+
+                    <div class="row" id="row-p1">
+                        <div class="hole" data-index="0">5</div>
+                        <div class="hole" data-index="1">5</div>
+                        <div class="hole" data-index="2">5</div>
+                        <div class="hole" data-index="3">5</div>
+                        <div class="hole" data-index="4">5</div>
+                        <div class="hole" data-index="5">5</div>
+                        <div class="hole" data-index="6">5</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-side" id="score-right">
+                <div class="player-score" id="score-wrap-p1">
+                    <span class="score-label">Joueur 1</span>
+                    <span class="score-val" id="score-p1">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="status-turn">Tour : Joueur 1</div>
+
+        <p style="margin-top:24px"><a href="../acceuil.html" class="btn secondary">Retour à l'accueil</a></p>
+    </div>
+
+    <script src="songo.js"></script>
+    <script>
+    // Petit debug/affichage du param ?player
+    (function(){
+        const params = new URLSearchParams(location.search);
+        const p = params.get('player');
+        const badge = document.getElementById('player-badge');
+        if (p) {
+            if (badge) {
+                badge.textContent = 'Vous êtes : Joueur ' + p;
+                badge.className = 'player-active-badge';
+            }
+            console.log('Local player param =', p);
+        } else {
+            if (badge) {
+                badge.textContent = 'Mode Observateur';
+                badge.className = 'spectator-badge';
+            }
+            console.log('Aucun param player fourni');
+        }
+    })();
+    </script>
+</body>
+</html>

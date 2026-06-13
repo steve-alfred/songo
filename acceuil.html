@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>🪘 Jeu de Songo 🪘</title>
+    <link rel="stylesheet" href="songo.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-container" class="home-container">
+        <div class="tribal-banner"></div>
+        <h1>Bienvenue au Jeu de Songo</h1>
+        <p class="home-subtitle">Découvrez le Songo, jeu traditionnel de semailles et de stratégie d'Afrique Centrale.
+            Jouez contre un ami en local ou affrontez un adversaire en ligne !</p>
+
+        <div class="home-buttons">
+            <a class="btn" href="locale.html">
+                <span class="btn-icon">👥</span> Jouer en local
+            </a>
+            <a id="btn-online" class="btn secondary" href="#">
+                <span class="btn-icon">🌐</span> Jouer en ligne
+            </a>
+        </div>
+
+        <script>
+            (function () {
+                const btn = document.getElementById('btn-online');
+                if (!btn) return;
+                btn.addEventListener('click', async function (e) {
+                    e.preventDefault();
+                    try {
+                        const res = await fetch('api.php?action=claim');
+                        const json = await res.json();
+                        if (json.status === 'ok' && json.player) {
+                            window.location.href = 'songo-enligne/enligne.html?player=' + json.player;
+                        } else if (json.status === 'full') {
+                            // rediriger en mode spectateur
+                            window.location.href = 'songo-enligne/enligne.html';
+                        } else {
+                            alert('Erreur connexion: ' + (json.message || ''));
+                        }
+                    } catch (err) {
+                        alert('Impossible de contacter le serveur');
+                    }
+                });
+            })();
+        </script>
+
+        <section class="rules-section">
+            <h3>Règles rapides</h3>
+            <ul>
+                <li><strong>Plateau :</strong> 14 cases, 5 graines par case au départ.</li>
+                <li><strong>Distribution :</strong> Choisissez une case de votre camp et semez les graines une à une
+                    dans le sens horaire.</li>
+                <li><strong>Capture :</strong> Si votre dernière graine tombe dans le camp adverse et porte le total de
+                    cette case à 2 ou 3 graines, vous les capturez (ainsi que les cases précédentes consécutives
+                    remplissant la même condition).</li>
+                <li><strong>Victoire :</strong> La partie se termine dès qu'un joueur capture 40 graines ou plus.</li>
+            </ul>
+        </section>
+
+    </div>
+</body>
+
+</html>
