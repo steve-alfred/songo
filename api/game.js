@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { put, list } from '@vercel/blob';
 
 export default async function handler(req, res) {
     // Étape 1 : Autoriser tous les sites à communiquer avec cette API (CORS)
@@ -11,13 +11,21 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    const gameId = 'songo_partie_actuelle';
+    const gameId = 'songo_partie_actuelle.json';
 
     // Étape 2 : Quand un joueur veut LIRE le plateau (GET)
     if (req.method === 'GET') {
         try {
-            // On demande à Redis l'état du jeu
-            let gameState = await kv.get(gameId);
+            // Lister les blobs pour trouver notre fichier de jeu
+            const { blobs } = await list({ prefix: 'songo_partie_actuelle' });
+            
+            let gameState = null;
+            
+            if (blobs.length > 0) {
+                // Récupérer le contenu du blob existant
+                const response = await fetch(blobs[0].url);
+                gameState = await response.json();
+            }
             
             // Si la partie n'existe pas encore, on crée le plateau initial
             if (!gameState) {
@@ -28,11 +36,11 @@ export default async function handler(req, res) {
                     score_p2: 0,
                     statut: 'active'
                 };
-                await kv.set(gameId, gameState);
+                await put(gameId, JSON.stringify(gameState), { access: 'public' });
             }
             return res.status(200).json(gameState);
         } catch (error) {
-            return res.status(500).json({ error: 'Erreur serveur Redis' });
+            return res.status(500).json({ error: 'Erreur serveur Blob Storage' });
         }
     }
 
@@ -49,7 +57,7 @@ export default async function handler(req, res) {
                 statut: data.statut
             };
             
-            await kv.set(gameId, newGameState);
+            await put(gameId, JSON.stringify(newGameState), { access: 'public' });
             return res.status(200).json({ status: 'success' });
         } catch (error) {
             return res.status(500).json({ error: 'Erreur lors de la sauvegarde' });

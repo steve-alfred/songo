@@ -2,21 +2,20 @@
 
 Jeu de Songo, un jeu traditionnel de semailles et de stratégie d'Afrique Centrale.
 
-## 🚀 Déploiement sur Vercel avec Redis
+## 🚀 Déploiement sur Vercel avec Blob Storage (Gratuit)
 
 ### Prérequis
 - Compte Vercel ([vercel.com](https://vercel.com))
 - Compte GitHub ([github.com](https://github.com))
 
-### Étape 1: Créer une base de données Redis sur Vercel
+### Étape 1: Créer un stockage Blob sur Vercel
 
 1. Allez sur [vercel.com](https://vercel.com) et connectez-vous
 2. Cliquez sur "Storage" puis "Create Database"
-3. Sélectionnez "Redis" (Vercel KV)
-4. Choisissez la région et créez la base de données
-5. Une fois créée, cliquez sur ".env.local" pour copier les variables d'environnement:
-   - `KV_REST_API_URL`
-   - `KV_REST_API_TOKEN`
+3. Sélectionnez "Blob" (Vercel Blob Storage)
+4. Choisissez la région et créez le stockage
+5. Une fois créé, cliquez sur ".env.local" pour copier la variable d'environnement:
+   - `BLOB_READ_WRITE_TOKEN`
 
 ### Étape 2: Déployer sur Vercel
 
@@ -25,8 +24,7 @@ Jeu de Songo, un jeu traditionnel de semailles et de stratégie d'Afrique Centra
 2. Importez votre repository GitHub
 3. Vercel détectera automatiquement la configuration
 4. Dans "Environment Variables", ajoutez:
-   - `KV_REST_API_URL` = (valeur depuis votre dashboard Redis)
-   - `KV_REST_API_TOKEN` = (valeur depuis votre dashboard Redis)
+   - `BLOB_READ_WRITE_TOKEN` = (valeur depuis votre dashboard Blob)
 5. Cliquez sur "Deploy"
 
 #### Option B: Via CLI Vercel
@@ -45,9 +43,8 @@ vercel
 
 1. Allez dans votre projet sur Vercel
 2. Cliquez sur "Settings" → "Environment Variables"
-3. Ajoutez les variables suivantes:
-   - `KV_REST_API_URL`: votre URL Redis
-   - `KV_REST_API_TOKEN`: votre token Redis
+3. Ajoutez la variable suivante:
+   - `BLOB_READ_WRITE_TOKEN`: votre token Blob Storage
 
 ## 📦 Déploiement sur GitHub
 
@@ -112,11 +109,12 @@ songo/
 ## 🛠️ Technologies
 
 - HTML5, CSS3, JavaScript
-- Vercel KV (Redis) pour le stockage en ligne
+- Vercel Blob Storage pour le stockage en ligne (gratuit)
 - Vercel pour l'hébergement
 
 ## 📝 Notes
 
-- Le jeu utilise Redis pour synchroniser l'état du jeu entre les joueurs
+- Le jeu utilise Vercel Blob Storage pour synchroniser l'état du jeu entre les joueurs
 - L'API dans `api/game.js` gère les requêtes GET (lecture) et POST (sauvegarde)
 - CORS est configuré pour autoriser les requêtes cross-origin
+- Blob Storage offre 1GB de stockage gratuit
